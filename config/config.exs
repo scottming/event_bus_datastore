@@ -9,7 +9,7 @@ postgrex_config = [
 ]
 
 config :event_bus_datastore,
-  table_name: "event_bus_events",
+  events_table_name: "event_bus_events",
   postgrex: postgrex_config,
   debug: true
 

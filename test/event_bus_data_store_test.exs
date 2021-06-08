@@ -1,8 +1,11 @@
 defmodule EventBusDatastoreTest do
   use ExUnit.Case
-  doctest EventBusDatastore
+  import TestHelper
+
+  setup [:create_events_table]
 
   test "greets the world" do
-    assert EventBusDatastore.hello() == :world
+    assert 1 == 1
   end
 end
+
