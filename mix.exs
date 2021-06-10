@@ -1,6 +1,8 @@
 defmodule EventBusDatastore.MixProject do
   use Mix.Project
 
+  @github_url "https://github.com/scottming/event_bus_datastore"
+
   def project do
     [
       app: :event_bus_datastore,
@@ -8,7 +10,16 @@ defmodule EventBusDatastore.MixProject do
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
-      deps: deps()
+      deps: deps(),
+      description: "An event_bus data store building with Broadway.",
+      package: [
+        files: ~w(mix.exs lib README.md),
+        licenses: ["MIT"],
+        maintainers: ["ScottMing"],
+        links: %{
+          "GitHub" => @github_url
+        }
+      ]
     ]
   end
 
