@@ -27,11 +27,11 @@ defmodule EventBusDatastore.Producer do
   end
 
   @doc false
-  def handle_cast({:put, event_shadow}, state) do
+  def handle_cast({:put, {_topic, _id} = event_shadow}, state) do
     events = [
       %Message{
-        data: "1",
-        metadata: event_shadow,
+        data: event_shadow,
+        metadata: %{},
         acknowledger: {Broadway.NoopAcknowledger, nil, nil}
       }
     ]

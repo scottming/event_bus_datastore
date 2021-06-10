@@ -17,7 +17,7 @@ defmodule EventBusDatastore.Migration do
         )
       end
 
-      def down() do
+      def down do
         Enum.each(
           EventBusDatastore.Migration.drop_statements(unquote(table_name)),
           fn statement ->

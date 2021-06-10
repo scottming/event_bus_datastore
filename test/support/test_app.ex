@@ -7,8 +7,10 @@ defmodule TestApp do
 
   def start(_types, _args) do
     {:ok, _} = Application.ensure_all_started(:ecto)
-    {:ok, _} = Application.ensure_all_started(:postgrex)
-    Supervisor.start_link([__MODULE__.Repo], strategy: :one_for_one)
+    {:ok, _} = Application.ensure_all_started(:event_bus)
+
+    EventBus.subscribe({EventBusDatastore, [".*"]})
+    Supervisor.start_link([__MODULE__.Repo, EventBusDatastore.Pipeline], strategy: :one_for_one)
   end
 end
 

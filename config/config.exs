@@ -1,5 +1,6 @@
 use Mix.Config
 
+# only for test
 postgrex_config = [
   username: "postgres",
   password: "postgres",
@@ -19,6 +20,7 @@ config :logger, level: :warn
 if Mix.env() == :test do
   config :event_bus_datastore, ecto_repos: [TestApp.Repo]
   config :event_bus_datastore, TestApp.Repo, postgrex_config
+  config :event_bus_datastore, repo: TestApp.Repo
 end
 
 if File.exists?("config/local.exs") do

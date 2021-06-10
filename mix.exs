@@ -19,12 +19,12 @@ defmodule EventBusDatastore.MixProject do
       :test ->
         [
           mod: {TestApp, []},
-          extra_applications: [:logger, :runtime_tools]
+          extra_applications: [:logger, :runtime_tools, :broadway, :event_bus]
         ]
 
       _ ->
         [
-          extra_applications: [:logger],
+          extra_applications: [:logger, :broadway, :event_bus],
           mod: {EventBusDatastore.Application, []}
         ]
 
@@ -48,9 +48,10 @@ defmodule EventBusDatastore.MixProject do
       {:gen_stage, "~> 1.0"},
       {:postgrex, ">= 0.13.3"},
       {:ecto, "~> 3.0"},
-      {:ecto_sql, "~> 3.0"},
+      {:ecto_sql, "~> 3.0", only: :test},
       {:broadway, "~> 0.6.0"},
-      {:event_bus, "~> 1.6.2"}
+      {:event_bus, "~> 1.6.2"},
+      {:elixir_uuid, "~> 1.2"}
     ]
   end
 end
