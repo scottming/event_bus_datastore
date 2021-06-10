@@ -19,7 +19,7 @@ defmodule EventBusDatastoreTest do
 
     EventBus.notify(event)
     Process.sleep(1100)
-    assert length(Store.all()) == 1
+    assert Store.count() == 1
   end
 
   def make_event_params(topic \\ :user_created) do

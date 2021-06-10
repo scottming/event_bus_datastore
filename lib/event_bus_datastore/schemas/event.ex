@@ -10,9 +10,8 @@ defmodule EventBusDatastore.Schemas.Event do
   import EventBusDatastore.Utils, only: [now: 0]
 
   @primary_key {:id, :binary_id, autogenerate: true}
-  @table_name Application.get_env(:event_bus_datastore, :events_table_name)
 
-  schema @table_name do
+  schema "event_bus_events" do
     field(:data, :binary)
     field(:initialized_at, :integer)
     field(:occurred_at, :integer)

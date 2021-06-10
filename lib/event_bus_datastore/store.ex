@@ -11,7 +11,6 @@ defmodule EventBusDatastore.Store do
 
   @pagination_vars %{page: 1, per_page: 20, since: 0}
   @pagination_vars_with_transaction_id Map.put(@pagination_vars, :transaction_id, nil)
-  @repo Application.get_env(:event_bus_datastore, :repo)
 
   @doc """
   Fetch all events with pagination
@@ -21,14 +20,14 @@ defmodule EventBusDatastore.Store do
 
     query =
       from(
-        e in Event,
+        e in source(),
         where: e.occurred_at >= ^since,
         offset: ^offset,
         limit: ^per_page
       )
 
     query
-    |> @repo.all()
+    |> repo().all()
     |> Enum.map(fn event -> Event.to_eb_event(event) end)
   end
 
@@ -38,13 +37,13 @@ defmodule EventBusDatastore.Store do
   def count_per_topic(%{since: since} \\ %{since: 0}) do
     query =
       from(
-        e in Event,
+        e in source(),
         where: e.occurred_at >= ^since,
         group_by: e.topic,
         select: %{topic: e.topic, count: count(e.id)}
       )
 
-    @repo.all(query)
+    repo().all(query)
   end
 
   @doc """
@@ -53,11 +52,11 @@ defmodule EventBusDatastore.Store do
   def count(%{since: since} \\ %{since: 0}) do
     query =
       from(
-        e in Event,
+        e in source(),
         where: e.occurred_at >= ^since
       )
 
-    @repo.aggregate(query, :count, :id)
+    repo().aggregate(query, :count, :id)
   end
 
   @doc """
@@ -68,7 +67,7 @@ defmodule EventBusDatastore.Store do
       ) do
     query =
       from(
-        e in Event,
+        e in source(),
         where:
           e.transaction_id == ^transaction_id and
             e.occurred_at >= ^since,
@@ -77,7 +76,7 @@ defmodule EventBusDatastore.Store do
       )
 
     query
-    |> @repo.all()
+    |> repo().all()
     |> Enum.map(fn event -> Event.to_eb_event(event) end)
   end
 
@@ -85,7 +84,7 @@ defmodule EventBusDatastore.Store do
   Find an event
   """
   def find(id) do
-    case @repo.get(Event, id) do
+    case repo().get(source(), id) do
       nil -> nil
       event -> Event.to_eb_event(event)
     end
@@ -95,7 +94,7 @@ defmodule EventBusDatastore.Store do
   Delete an event
   """
   def delete(id) do
-    @repo.delete(%Event{id: id})
+    repo().delete(%Event{id: id})
   end
 
   @doc """
@@ -106,7 +105,7 @@ defmodule EventBusDatastore.Store do
   end
 
   def batch_insert(events) do
-    @repo.insert_all(Event, events, on_conflict: :nothing)
+    repo().insert_all(source(), events, on_conflict: :nothing)
   end
 
   @doc """
@@ -117,11 +116,19 @@ defmodule EventBusDatastore.Store do
 
     query =
       from(
-        e in Event,
+        e in source(),
         where: fragment("? + ? >= ?", e.occurred_at, e.ttl, ^now)
       )
 
-    @repo.delete_all(query)
+    repo().delete_all(query)
+  end
+
+  def source() do
+    {EventBusDatastore.Config.events_table_name(), Event}
+  end
+
+  def repo() do
+    Application.get_env(:event_bus_datastore, :repo)
   end
 end
 
