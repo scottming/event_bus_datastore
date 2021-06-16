@@ -6,7 +6,7 @@ defmodule EventBusDatastore.MixProject do
   def project do
     [
       app: :event_bus_datastore,
-      version: "0.1.0",
+      version: "0.1.2",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -59,6 +59,7 @@ defmodule EventBusDatastore.MixProject do
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:gen_stage, "~> 1.0"},
       {:postgrex, ">= 0.13.3"},
+      {:jason, "~> 1.2"},
       {:ecto, "~> 3.0"},
       {:ecto_sql, "~> 3.0", only: :test},
       {:broadway, "~> 0.6.0"},

@@ -1,6 +1,6 @@
 defmodule EventBusDatastore.Schemas.Event do
   @moduledoc """
-  Event struct, stolen from here: 
+  Event struct, stolen from here:
   https://github.com/otobus/event_bus_postgres/blob/main/lib/event_bus_postgres/models/event.ex
   """
 
@@ -12,7 +12,7 @@ defmodule EventBusDatastore.Schemas.Event do
   @primary_key {:id, :binary_id, autogenerate: true}
 
   schema "event_bus_events" do
-    field(:data, :binary)
+    field(:data, :map)
     field(:initialized_at, :integer)
     field(:occurred_at, :integer)
     field(:source, :string)
@@ -27,7 +27,7 @@ defmodule EventBusDatastore.Schemas.Event do
       id: event.id,
       transaction_id: event.transaction_id,
       topic: "#{event.topic}",
-      data: :erlang.term_to_binary(event.data),
+      data: event.data,
       initialized_at: event.initialized_at,
       occurred_at: event.occurred_at || now(),
       source: event.source,
@@ -41,7 +41,7 @@ defmodule EventBusDatastore.Schemas.Event do
       id: "#{event.id}",
       transaction_id: "#{event.transaction_id}",
       topic: :"#{event.topic}",
-      data: :erlang.binary_to_term(event.data),
+      data: event.data,
       initialized_at: event.initialized_at,
       occurred_at: event.occurred_at,
       source: event.source,
@@ -49,4 +49,3 @@ defmodule EventBusDatastore.Schemas.Event do
     }
   end
 end
-

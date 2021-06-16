@@ -36,7 +36,7 @@ defmodule EventBusDatastore.Migration do
         id uuid not null constraint #{table_name}_pkey primary key,
         transaction_id uuid,
         topic          varchar(255),
-        data           bytea,
+        data           jsonb,
         initialized_at bigint,
         occurred_at    bigint,
         source         varchar(255),
