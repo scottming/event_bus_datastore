@@ -7,7 +7,6 @@ defmodule EventBusDatastore.Producer do
   alias Broadway.Message
 
   def init(state) do
-    IO.puts("EventBusDatastore producer is starting")
     {:producer, state, buffer_size: :infinity}
   end
 
